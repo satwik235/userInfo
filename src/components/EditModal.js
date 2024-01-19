@@ -9,6 +9,7 @@ const EditModal = ({ card, onClose, onEdit }) => {
     onClose();
   };
 
+  
   return (
     <Modal open={true} onClose={onClose}>
       <Box className="modal">
