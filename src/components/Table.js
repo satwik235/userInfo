@@ -1,20 +1,28 @@
-// Table.js
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import CustomCard from './Card';
-import AgeGroup from './AgeGroup'; // Import the AgeGroup component
+import AgeGroup from './AgeGroup';
 import { useDispatch } from 'react-redux';
-import { moveCard } from '../actions/cardActions';
+import { moveCard, mergeCards } from '../actions/cardActions';
 
 const CustomTable = ({ cards, onEdit, onDelete }) => {
   const dispatch = useDispatch();
 
-  const handleDrop = (cardId, targetAge) => {
-    // Dispatch the moveCard action for the entire column when a card is dropped
-    const updatedCards = cards.map((card) =>
-      card.id === cardId ? { ...card, age: targetAge } : card
+  const handleDrop = (cardId, targetAge, targetIndex) => {
+    const updatedCards = [...cards];
+    const draggedCard = updatedCards.find((card) => card.id === cardId);
+
+    if (draggedCard) {
+      updatedCards.splice(targetIndex, 0, { ...draggedCard, age: targetAge });
+      dispatch(moveCard(updatedCards));
+    }
+  };
+  const renderTableHeading = (start, end) => {
+    return (
+      <TableCell key={`${start}-${end}`} align="center">
+        Age {start} - {end}
+      </TableCell>
     );
-    dispatch(moveCard(updatedCards));
   };
 
   const renderTableCells = (start, end) => {
@@ -26,22 +34,17 @@ const CustomTable = ({ cards, onEdit, onDelete }) => {
       }
     });
 
-    return (
-    <TableCell key={`${start}-${end}`}>
-      <AgeGroup
-        cards={filteredCards}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        onDrop={(cardId, targetAge) => handleDrop(cardId, targetAge)}
-      />
-    </TableCell>
-    );
-  };
+   
 
-  const renderTableHeading = (start, end) => {
     return (
-      <TableCell key={`${start}-${end}`} align="center">
-        Age {start} - {end}
+      <TableCell key={`${start}-${end}`}>
+        <AgeGroup
+          cards={filteredCards}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onDrop={(cardId, targetAge) => handleDrop(cardId, targetAge, filteredCards.length)}
+          mergeCards={mergeCards} 
+        />
       </TableCell>
     );
   };

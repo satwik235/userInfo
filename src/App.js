@@ -27,6 +27,7 @@ const App = () => {
   };
 
   const handleDeleteCard = (cardId) => {
+    setEditModalOpen(false)
     const updatedCards = cards.filter((card) => card.id !== cardId);
     setCards(updatedCards);
   };
@@ -53,7 +54,6 @@ const App = () => {
     <Container component="main" maxWidth="lg">
       <CssBaseline />
       <div className="paper">
-        <Typography variant="h5">Card Management App</Typography>
         <Button variant="contained" color="primary" onClick={handleAddButtonClick}>
           Add
         </Button>

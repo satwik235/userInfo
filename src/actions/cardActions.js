@@ -1,3 +1,4 @@
+// actions/cardActions.js
 import * as actionTypes from '../constants/actionTypes';
 
 export const addCard = (card) => ({
@@ -15,7 +16,12 @@ export const deleteCard = (cardId) => ({
   payload: cardId,
 });
 
-export const moveCard = (card) => ({
+export const moveCard = (cards) => ({
   type: actionTypes.MOVE_CARD,
-  payload: card,
+  payload: cards,
+});
+
+export const mergeCards = (mergedCard) => ({
+  type: actionTypes.MERGE_CARDS,
+  payload: mergedCard,
 });

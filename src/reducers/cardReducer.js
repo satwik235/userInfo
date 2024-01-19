@@ -1,3 +1,4 @@
+// reducers/cardReducer.js
 import * as actionTypes from '../constants/actionTypes';
 
 const initialState = {
@@ -31,14 +32,19 @@ const cardReducer = (state = initialState, action) => {
         ...state,
         cards: filteredCards,
       };
-     
+    case actionTypes.MOVE_CARD:
+      return {
+        ...state,
+        cards: action.payload,
+      };
+    case actionTypes.MERGE_CARDS:
+      const { mergedCard } = action.payload;
+      const mergedCardIndex = state.cards.findIndex((card) => card.id === mergedCard.id);
 
-     case actionTypes.MOVE_CARD:
-      const updatedCardIndex = state.cards.findIndex((card) => card.id === action.payload.id);
-
-      if (updatedCardIndex !== -1) {
+      if (mergedCardIndex !== -1) {
         const updatedCards = [...state.cards];
-        updatedCards[updatedCardIndex] = action.payload;
+        // You might want to customize the merging logic based on your requirements
+        updatedCards[mergedCardIndex] = { ...updatedCards[mergedCardIndex], ...mergedCard };
 
         return {
           ...state,
@@ -47,7 +53,6 @@ const cardReducer = (state = initialState, action) => {
       }
 
       return state;
-
     default:
       return state;
   }
